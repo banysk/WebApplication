@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
+using WebApp.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 var environment = builder.Environment;
@@ -12,6 +14,10 @@ services.AddControllers();
 services.AddSpaStaticFiles(configuration => {
     configuration.RootPath = "client/build";
 });
+
+services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DbConnection")
+));
 
 services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
